@@ -5,39 +5,60 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Registro de Visitantes GB Lab</title>
   <link rel="stylesheet" href="./style.css" />
-  <!-- Librería para firma (soporta mouse y dedo en móvil) -->
+  <!-- Librería para firma -->
   <script src="https://cdn.jsdelivr.net/npm/signature_pad@4.1.5/dist/signature_pad.umd.min.js"></script>
 </head>
 <body>
   <main class="container">
+    <div class="logo-wrap">
+      <img src="./img/logo.jpeg" alt="Logo GB Lab" class="logo" />
+    </div>
     <h1>Registro de Visitantes</h1>
     <p class="subtitle">Por favor completa tus datos y dibuja tu firma.</p>
 
     <form id="visit-form">
       <div class="field">
-        <label for="nombre">Nombre *</label>
-        <input id="nombre" name="nombre" type="text" placeholder="Juan" required />
+        <label for="nombre">Nombre y apellidos *</label>
+        <input id="nombre" name="nombre" type="text" placeholder="Juan Pérez" required />
       </div>
 
       <div class="field">
-        <label for="apellido">Apellido *</label>
-        <input id="apellido" name="apellido" type="text" placeholder="Pérez" required />
+        <label for="fecha_entrada">Fecha de entrada *</label>
+        <input id="fecha_entrada" name="fecha_entrada" type="date" required />
       </div>
 
       <div class="field">
-        <label for="sede">Sede que visitas *</label>
-        <select id="sede" name="sede" required>
-          <option value="" disabled selected>Selecciona una sede</option>
-          <option>Sede Norte</option>
-          <option>Sede Sur</option>
-          <option>Bodega</option>
-          <option>Laboratorio Principal</option>
-          <option>Otra</option>
-        </select>
+        <label for="empresa">Empresa *</label>
+        <input id="empresa" name="empresa" type="text" placeholder="Nombre de la empresa" required />
       </div>
 
       <div class="field">
-        <label>Firma *</label>
+        <label for="visita">A quién visita *</label>
+        <input id="visita" name="visita" type="text" placeholder="Nombre del anfitrión" required />
+      </div>
+
+      <div class="field">
+        <label for="hora_entrada">Hora de entrada *</label>
+        <input id="hora_entrada" name="hora_entrada" type="time" required />
+      </div>
+
+      <div class="field">
+        <label for="eps">EPS *</label>
+        <input id="eps" name="eps" type="text" placeholder="Nombre de la EPS" required />
+      </div>
+
+      <div class="field">
+        <label for="arl">ARL *</label>
+        <input id="arl" name="arl" type="text" placeholder="Nombre de la ARL" required />
+      </div>
+
+      <div class="field">
+        <label for="hora_salida">Hora de salida aproximada *</label>
+        <input id="hora_salida" name="hora_salida" type="time" required />
+      </div>
+
+      <div class="field">
+        <label>Firma del visitante *</label>
         <div class="sig-card">
           <div class="sig-wrap">
             <canvas id="canvas" aria-label="Área para firmar"></canvas>

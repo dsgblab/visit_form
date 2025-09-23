@@ -43,12 +43,16 @@ form.addEventListener("submit", async (e) => {
   statusMsg.textContent = "";
   statusMsg.className = "status";
 
-  const nombre   = document.getElementById("nombre").value.trim();
-  const apellido = document.getElementById("apellido").value.trim();
-  const sede     = document.getElementById("sede").value;
-  const fechaISO = new Date().toISOString();
+  const nombre        = document.getElementById("nombre").value.trim();
+  const fecha_entrada = document.getElementById("fecha_entrada").value;
+  const empresa       = document.getElementById("empresa").value.trim();
+  const visita        = document.getElementById("visita").value.trim();
+  const hora_entrada  = document.getElementById("hora_entrada").value;
+  const eps           = document.getElementById("eps").value.trim();
+  const arl           = document.getElementById("arl").value.trim();
+  const hora_salida   = document.getElementById("hora_salida").value;
 
-  if (!nombre || !apellido || !sede) {
+  if (!nombre || !fecha_entrada || !empresa || !visita || !hora_entrada || !eps || !arl || !hora_salida) {
     statusMsg.textContent = "⚠️ Por favor completa todos los campos obligatorios.";
     statusMsg.classList.add("error");
     return;
@@ -63,7 +67,17 @@ form.addEventListener("submit", async (e) => {
   const firmaDataURL = signaturePad.toDataURL("image/png");
 
   // Payload
-  const payload = { nombre, apellido, sede, fecha: fechaISO, firma: firmaDataURL };
+  const payload = {
+    nombre,
+    fecha_entrada,
+    empresa,
+    visita,
+    hora_entrada,
+    eps,
+    arl,
+    hora_salida,
+    firma: firmaDataURL
+  };
 
   if (!ENDPOINT) {
     debug.hidden = false;
