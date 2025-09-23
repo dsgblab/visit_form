@@ -1,5 +1,5 @@
 // ===== CONFIGURACIÓN =====
-const ENDPOINT = "https://script.google.com/macros/s/AKfycbx1oOaQjHufK_f-YOPIN2luM6QOhEW5y-U-T2YRQ8yZpetfUSzpZB-1201Bb9mzaF7aXw/exec";
+const ENDPOINT = "https://script.google.com/macros/s/AKfycbx55AR5QDLcQYev7Prki3a_63yBbAHZNSiDSW8sBTV0l8710JlOEsWfeadjxF4ely9vmg/exec";
 
 // ===== Elementos =====
 const canvas   = document.getElementById("canvas");
