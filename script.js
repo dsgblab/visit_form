@@ -1,12 +1,11 @@
 // ===== CONFIGURACIÓN =====
-const ENDPOINT = "https://script.google.com/macros/s/AKfycbx55AR5QDLcQYev7Prki3a_63yBbAHZNSiDSW8sBTV0l8710JlOEsWfeadjxF4ely9vmg/exec";
+const ENDPOINT = "https://script.google.com/macros/s/AKfycbzEw7ZPI5f_-lhdj6cleHPkpZzAppGoZ-Z10CTIJ8y6h2NMG6DVAK_Of1gs6sXgUr25qg/exec";
 
 // ===== Elementos =====
-const canvas   = document.getElementById("canvas");
-const form     = document.getElementById("visit-form");
-const btnClear = document.getElementById("btn-clear");
-const debug    = document.getElementById("debug");
-const statusMsg= document.getElementById("status");
+const canvas    = document.getElementById("canvas");
+const form      = document.getElementById("visit-form");
+const btnClear  = document.getElementById("btn-clear");
+const statusMsg = document.getElementById("status");
 
 let signaturePad;
 
@@ -39,20 +38,25 @@ btnClear.addEventListener("click", () => signaturePad.clear());
 form.addEventListener("submit", async (e) => {
   e.preventDefault();
 
-  // limpia estado
+  // Limpia estado
   statusMsg.textContent = "";
   statusMsg.className = "status";
 
+  // Toma TODOS los campos que exige el backend
   const nombre        = document.getElementById("nombre").value.trim();
-  const fecha_entrada = document.getElementById("fecha_entrada").value;
+  const documento     = document.getElementById("documento").value.trim();
+  const fecha_ingreso = document.getElementById("fecha_ingreso").value;
   const empresa       = document.getElementById("empresa").value.trim();
   const visita        = document.getElementById("visita").value.trim();
+  const motivo        = document.getElementById("motivo").value.trim();
   const hora_entrada  = document.getElementById("hora_entrada").value;
   const eps           = document.getElementById("eps").value.trim();
   const arl           = document.getElementById("arl").value.trim();
   const hora_salida   = document.getElementById("hora_salida").value;
 
-  if (!nombre || !fecha_entrada || !empresa || !visita || !hora_entrada || !eps || !arl || !hora_salida) {
+  // Validaciones básicas
+  if (!nombre || !documento || !fecha_ingreso || !empresa || !visita ||
+      !motivo || !hora_entrada || !eps || !arl || !hora_salida) {
     statusMsg.textContent = "⚠️ Por favor completa todos los campos obligatorios.";
     statusMsg.classList.add("error");
     return;
@@ -63,15 +67,17 @@ form.addEventListener("submit", async (e) => {
     return;
   }
 
-  // Firma como PNG base64
+  // Firma PNG base64
   const firmaDataURL = signaturePad.toDataURL("image/png");
 
-  // Payload
+  // Payload con las CLAVES que espera Apps Script
   const payload = {
     nombre,
-    fecha_entrada,
+    documento,
+    fecha_ingreso,
     empresa,
     visita,
+    motivo,
     hora_entrada,
     eps,
     arl,
@@ -79,31 +85,35 @@ form.addEventListener("submit", async (e) => {
     firma: firmaDataURL
   };
 
-  if (!ENDPOINT) {
-    debug.hidden = false;
-    debug.textContent = "MODO PRUEBA:\n" + JSON.stringify(payload, null, 2);
-    statusMsg.textContent = "ℹ️ Datos capturados (modo prueba).";
-    statusMsg.classList.add("success");
-    return;
-  }
+  // UI: deshabilito botón mientras envío
+  const submitBtn = form.querySelector('button[type="submit"]');
+  submitBtn.disabled = true;
 
   try {
     const res = await fetch(ENDPOINT, {
       method: "POST",
-      // Usamos text/plain para evitar preflight CORS con Apps Script
-      headers: { "Content-Type": "text/plain;charset=utf-8" },
+      headers: { "Content-Type": "text/plain;charset=utf-8" }, // evita preflight
       body: JSON.stringify(payload)
     });
 
-    const text = await res.text();
+    // Intento leer JSON; si falla, muestro texto plano
+    let body;
+    try {
+      body = await res.json();
+    } catch {
+      body = { ok: false, error: await res.text() };
+    }
 
-    if (!res.ok) {
-      console.error("HTTP", res.status, text);
-      statusMsg.textContent = "❌ Error " + res.status + ": " + text;
+    // Importante: el backend devuelve 200 incluso con error -> revisar body.ok
+    if (!res.ok || !body.ok) {
+      const msg = body && body.error ? body.error : `HTTP ${res.status}`;
+      console.error("Error de servidor:", msg);
+      statusMsg.textContent = "❌ Error: " + msg;
       statusMsg.classList.add("error");
       return;
     }
 
+    // Éxito
     statusMsg.textContent = "✔️ Registro enviado con éxito.";
     statusMsg.classList.add("success");
     form.reset();
@@ -112,5 +122,7 @@ form.addEventListener("submit", async (e) => {
     console.error(err);
     statusMsg.textContent = "❌ Fallo de red: " + String(err);
     statusMsg.classList.add("error");
+  } finally {
+    submitBtn.disabled = false;
   }
 });

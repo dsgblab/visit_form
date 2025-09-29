@@ -13,6 +13,7 @@
     <div class="logo-wrap">
       <img src="./img/logo.jpeg" alt="Logo GB Lab" class="logo" />
     </div>
+
     <h1>Registro de Visitantes</h1>
     <p class="subtitle">Por favor completa tus datos y dibuja tu firma.</p>
 
@@ -23,18 +24,28 @@
       </div>
 
       <div class="field">
-        <label for="fecha_entrada">Fecha de entrada *</label>
-        <input id="fecha_entrada" name="fecha_entrada" type="date" required />
+        <label for="documento">Documento de identidad *</label>
+        <input id="documento" name="documento" type="text" placeholder="CC / CE / Pasaporte" required />
       </div>
 
       <div class="field">
-        <label for="empresa">Empresa *</label>
+        <label for="fecha_ingreso">Fecha de ingreso *</label>
+        <input id="fecha_ingreso" name="fecha_ingreso" type="date" required />
+      </div>
+
+      <div class="field">
+        <label for="empresa">Empresa de donde viene *</label>
         <input id="empresa" name="empresa" type="text" placeholder="Nombre de la empresa" required />
       </div>
 
       <div class="field">
         <label for="visita">A quién visita *</label>
         <input id="visita" name="visita" type="text" placeholder="Nombre del anfitrión" required />
+      </div>
+
+      <div class="field">
+        <label for="motivo">Motivo de la visita *</label>
+        <textarea id="motivo" name="motivo" rows="3" placeholder="Breve descripción" required></textarea>
       </div>
 
       <div class="field">
