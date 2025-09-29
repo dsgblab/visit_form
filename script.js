@@ -90,30 +90,15 @@ form.addEventListener("submit", async (e) => {
   submitBtn.disabled = true;
 
   try {
-    const res = await fetch(ENDPOINT, {
+    // Importante: no intentamos leer la respuesta (GAS hace redirect y no da CORS)
+    await fetch(ENDPOINT, {
       method: "POST",
-      headers: { "Content-Type": "text/plain;charset=utf-8" }, // evita preflight
+      mode: "no-cors", // evita el error visual de CORS/redirect
+      headers: { "Content-Type": "text/plain;charset=utf-8" },
       body: JSON.stringify(payload)
     });
 
-    // Intento leer JSON; si falla, muestro texto plano
-    let body;
-    try {
-      body = await res.json();
-    } catch {
-      body = { ok: false, error: await res.text() };
-    }
-
-    // Importante: el backend devuelve 200 incluso con error -> revisar body.ok
-    if (!res.ok || !body.ok) {
-      const msg = body && body.error ? body.error : `HTTP ${res.status}`;
-      console.error("Error de servidor:", msg);
-      statusMsg.textContent = "❌ Error: " + msg;
-      statusMsg.classList.add("error");
-      return;
-    }
-
-    // Éxito
+    // Si no hubo excepción, asumimos éxito
     statusMsg.textContent = "✔️ Registro enviado con éxito.";
     statusMsg.classList.add("success");
     form.reset();
