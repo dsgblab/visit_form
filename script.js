@@ -6,6 +6,7 @@ const canvas    = document.getElementById("canvas");
 const form      = document.getElementById("visit-form");
 const btnClear  = document.getElementById("btn-clear");
 const statusMsg = document.getElementById("status");
+const delayHint = document.getElementById("delay-hint");
 
 let signaturePad;
 
@@ -89,6 +90,10 @@ form.addEventListener("submit", async (e) => {
   const submitBtn = form.querySelector('button[type="submit"]');
   submitBtn.disabled = true;
 
+  // Cambio color/texto mientras se envía
+  delayHint.style.color = "#2563eb"; // azul
+  delayHint.textContent = "⏳ Enviando... esto puede tardar unos segundos.";
+
   try {
     // Importante: no intentamos leer la respuesta (GAS hace redirect y no da CORS)
     await fetch(ENDPOINT, {
@@ -109,5 +114,7 @@ form.addEventListener("submit", async (e) => {
     statusMsg.classList.add("error");
   } finally {
     submitBtn.disabled = false;
+    delayHint.style.color = "#6b7280"; // gris
+    delayHint.textContent = "⏳ Después de dar clic en 'Enviar' la respuesta puede tardar de 5 a 10 segundos. Por favor no presiones el botón varias veces.";
   }
 });

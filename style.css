@@ -176,3 +176,12 @@ textarea:focus {
   border-color: #c7d2fe;
   box-shadow: 0 0 0 4px rgba(37,99,235,.12);
 }
+
+/* Aviso de demora */
+.muted {
+  display: block;
+  text-align: center;
+  margin-top: 8px;
+  font-size: 0.85rem;
+  color: var(--muted);
+}
